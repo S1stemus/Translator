@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
@@ -60,8 +61,16 @@ namespace Translator
 
         private void CompilationButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveTextBox.Text = string.Empty;    
-            Translation.Reader.Initialize(Path);
+            if (!File.Exists(Path)) {
+                string path ="text.txt";
+                File.WriteAllText(path,SelectTextBox.Text);
+                SaveTextBox.Text=File.ReadAllText(path);
+                Translation.Reader.Initialize(path);
+            }
+            else { 
+                Translation.Reader.Initialize(Path);
+            }
+            SaveTextBox.Text = string.Empty;
             //LexicalAnalyzer lexems = new LexicalAnalyzer();
             //NameTables.NameTable idef = new NameTables.NameTable();
             ErrorHandler errors = new ErrorHandler();
